@@ -8,5 +8,8 @@ body {
   margin-right: 30%;
   border-left: solid 1px ;
   border-right: solid 1px ;
-  
+}
+.coin {
+  border-style: solid;
+  padding: 5%
 }
