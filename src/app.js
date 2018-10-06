@@ -10,8 +10,6 @@ const request = require('request');
 
 
 app.post('/portData', (req,res) => {
-    //let test = JSON.parse(req.body.data)
-  console.log(req.body)
 
     let fetchThese = req.body;
 
@@ -33,8 +31,8 @@ app.post('/portData', (req,res) => {
   
   request(requestOptions, function (error, response, body) {
     
-    console.log('error:', error); // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    console.log('error:', error); 
+    console.log('statusCode:', response && response.statusCode);
     let dataResponse = {}
     
     body.data.forEach( (element) => {

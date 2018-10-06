@@ -2,3 +2,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+#gains {
+  height: 16px;
+  width: 16px;
+}
+.cell {
+  margin-left: 50px;
+}
+.row {
+  display: inline-block;
+}
+.img {
+  width:20px; 
+  height:20px;
+}
+.coin {
+  border-style: solid;
+  padding: 5%;
+  margin: 10px;
+  border-radius: 20px;
+  background: rgb(251, 251, 246)
+}
