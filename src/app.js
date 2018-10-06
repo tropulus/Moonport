@@ -1,36 +1,64 @@
-//var config = require('../config')
 var fs = require('fs');
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+const request = require('request');
+
+  
 
 
+app.post('/portData', (req,res) => {
+    //let test = JSON.parse(req.body.data)
+  console.log(req.body)
 
-app.get('/fetch', (req,res) => {
+    let fetchThese = req.body;
 
+  const requestOptions = {
+    method: 'GET',
+    uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
+    qs: {
+      start: 1,
+      limit: 3,
+      convert: 'USD',
+      sort: "market_cap"
+    },
+    headers: {
+      'X-CMC_PRO_API_KEY': fs.readFileSync('key.txt').toString('ascii')
+    },
+    json: true,
+    gzip: true
+  };
+  
+  request(requestOptions, function (error, response, body) {
     
-    var secretkey =  fs.readFileSync('key.txt')
-    console.log(secretkey);
+    console.log('error:', error); // Print the error if one occurred
+    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    let dataResponse = {}
     
-    /* var url = 'https://pro-api.coinmarketcap.com';
+    body.data.forEach( (element) => {
 
-    var myInit = { method: 'GET',
-                headers: {
-                    'X-CMC_PRO_API_KEY': secretkey
-                },
-                mode: "cors",
-                };
+        let key = element.symbol;
 
-    var myRequest = new Request(url, myInit);
+        dataResponse[key] = {
+            name: element.name,
+            price: element.quote.USD.price,
+            dayMove: element.quote.USD.percent_change_24h,
+        }
+    }
+    )
 
-    fetch(myRequest)
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(myJson) {
-        console.log(JSON.stringify(myJson));
-  }); */
+    let dataResponse2 = {};
+
+    for (let i in fetchThese){
+        let key = fetchThese[i]
+        dataResponse2[key] = dataResponse[key]
+    }
+
+    res.send(dataResponse2)
+
+  });
 })
 
-app.listen(3000, () => console.log('listening on port 3000!'))
+app.listen(5000, () => console.log('listening on port 5000!'))
