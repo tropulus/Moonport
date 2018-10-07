@@ -18,7 +18,7 @@ app.post('/portData', (req,res) => {
     uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
     qs: {
       start: 1,
-      limit: 3,
+      limit: 100,
       convert: 'USD',
       sort: "market_cap"
     },
@@ -31,6 +31,7 @@ app.post('/portData', (req,res) => {
   
   request(requestOptions, function (error, response, body) {
     
+    //console.log(body)
     console.log('error:', error); 
     console.log('statusCode:', response && response.statusCode);
     let dataResponse = {}
@@ -40,7 +41,8 @@ app.post('/portData', (req,res) => {
         let key = element.symbol;
 
         dataResponse[key] = {
-            name: element.name,
+            title: element.name,
+            name: element.slug,
             price: element.quote.USD.price,
             dayMove: element.quote.USD.percent_change_24h,
         }

@@ -5,7 +5,7 @@ import Portfolio from './components/portfolio';
 
 
 
-ReactDOM.render(<Portfolio />, document.getElementById('root'));
+ReactDOM.render(<Portfolio />, document.getElementById('add'));
 //ReactDOM.render(<About />, document.getElementById('root'));
 //ReactDOM.render(<Settings />, document.getElementById('root'));
 //ReactDOM.render(<Help />, document.getElementById('root'));
