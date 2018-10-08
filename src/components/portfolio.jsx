@@ -16,7 +16,6 @@ class Portfolio extends React.Component {
                 fetchThese.push(localStorage.key(i))
             }
 
-
             fetch('/portData', {
                     method: "POST",
                     mode: "cors", 
@@ -35,10 +34,14 @@ class Portfolio extends React.Component {
                 })
                 .then(function(myJson) {
                     let portfolioContainer = [];
+                    let total;
                     
                         for (let i = 0; i < localStorage.length; i++){
             
                             let tag = localStorage.key(i)
+                            total += Math.round(myJson[tag].price*JSON.parse(localStorage[tag]).amount*100)/100
+                            console.log(total);
+                            
 
                             function getLogo(){ //fetching logo
                                 let name = myJson[tag].name.toLowerCase()
@@ -104,16 +107,23 @@ class Portfolio extends React.Component {
                                             </div>
                                     </div>
                                 </div>
-                            )    
+                            ) 
+                            
+                        
                         }
+
+
                         ReactDOM.render(
                                 <div>
                                     {portfolioContainer}
                                 </div>, 
                             document.getElementById('root')
                         )
-                });
+            });
             
+            
+
+
 
             function handleSubmit(){
 
@@ -160,7 +170,7 @@ class Portfolio extends React.Component {
                             <label htmlFor="price">Price USD</label>
                             <input id="price" placeholder="Price USD"></input>
 
-                            <button className="form">Submit</button>
+                            <button className="form">Add to portfolio</button>
 
                         </form>
                         </div>
@@ -168,6 +178,8 @@ class Portfolio extends React.Component {
 
                 ,document.getElementById('add'))    
             }
+
+            
 
         return (
             <div>

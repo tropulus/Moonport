@@ -45,7 +45,7 @@ app.post('/portData', (req,res) => {
             name: element.slug,
             price: element.quote.USD.price,
             dayMove: element.quote.USD.percent_change_24h,
-        }
+        } 
     }
     )
 
