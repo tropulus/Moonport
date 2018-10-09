@@ -33,15 +33,21 @@ class Portfolio extends React.Component {
                     return response.json();
                 })
                 .then(function(myJson) {
-                    let portfolioContainer = [];
-                    let total;
+                    let portfolioContainer = []; //here is where we put the containers of positions
+                    let total = 0; //total portfolio value
+                    let totalInvestment = 0;
+
+
                     
                         for (let i = 0; i < localStorage.length; i++){
             
-                            let tag = localStorage.key(i)
-                            total += Math.round(myJson[tag].price*JSON.parse(localStorage[tag]).amount*100)/100
-                            console.log(total);
+                            let tag = localStorage.key(i) //key from local storage
+                            let diff = Math.round(((myJson[tag].price)/(parseFloat("" + JSON.parse(localStorage[tag]).price + ""))-1)*10000)/100;  //profit/loss
                             
+                            let dayMove = Math.round(myJson[tag].dayMove*100)/100; //24h %
+
+                            total +=  Math.round(myJson[tag].price*JSON.parse(localStorage[tag]).amount*100)/100
+                            totalInvestment += JSON.parse(localStorage[tag]).amount*JSON.parse(localStorage[tag]).price                                                     
 
                             function getLogo(){ //fetching logo
                                 let name = myJson[tag].name.toLowerCase()
@@ -49,16 +55,6 @@ class Portfolio extends React.Component {
                                 let logo = <img src={source} className="img" alt={name + ".img"}/>
                                 return logo
                             }
-
-                           
-                               let dayMove = Math.round(myJson[tag].dayMove*100)/100; //removing decimals from 24h data
-                               let move;
-                               if (dayMove < 0){
-                                   move = <img id="gains" src ={red} alt="12354" />
-                               } else {
-                                   move = <img id="gains" src ={green} alt="12354" />
-                               }
-                               dayMove += "%"
                             
                                function priceToday(){ // make price more readable
                                    let price = myJson[tag].price
@@ -72,7 +68,7 @@ class Portfolio extends React.Component {
                                 return "$" + price
                                }
 
-                               function hold(){ // make price more readable
+                               function hold(){ // make amount more readable
                                     let amount = JSON.parse(localStorage[tag]).amount
                                     if (amount < 1){
                                     amount = Math.round(JSON.parse(localStorage[tag]).amount*1000000)/1000000
@@ -81,21 +77,22 @@ class Portfolio extends React.Component {
                                     }
                                 return tag + " " + amount
                                 }
-                                let diff = Math.round(((myJson[tag].price)/(parseInt("" + JSON.parse(localStorage[tag]).price + ""))-1)*10000)/100;
-                                let move2;
-                               if (diff < 0){
-                                   move2 = <img id="gains" src ={red} alt="12354" />
-                               } else {
-                                   move2 = <img id="gains" src ={green} alt="12354" />
-                               }
-                               diff += "%"
+
+
                             
-                            portfolioContainer.push( 
+                            portfolioContainer.push( //putting it all together
                                 <div className="coin" key= {tag}>
                                     <div id="myTable">
+                                        <button onClick={clickOption} className="options">⋮</button>
+                                            <div ref={testing} className="dropdown-content">
+                                                <p>Edit</p>
+                                                <p>Move up</p>
+                                                <p>Move down</p>
+                                            </div>
+
                                             <div className="row">
-                                                <div className="cell"><div><h4>{ myJson[tag].title }</h4>{localStorage.key(i)} {getLogo()}</div> </div>
-                                                <div className="cell"><p>24h : {move}{dayMove} </p></div>
+                                                <div className="cell"><div><h4>{ myJson[tag].title }</h4>{localStorage.key(i)} {getLogo()}</div></div>
+                                                <div className="cell"><p>24h : {arrow(dayMove)} </p></div>
                                             </div>
                                             <div className="row">
                                                 <div className="cell">{"$" + Math.round(myJson[tag].price*JSON.parse(localStorage[tag]).amount*100)/100}</div>
@@ -103,26 +100,41 @@ class Portfolio extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="cell"><p>Price: { priceToday() }</p></div>
-                                                <div className="cell"><p>P/L: {move2}{diff}</p></div>
+                                                <div className="cell"><p>P/L: {arrow(diff)}</p></div>
                                             </div>
                                     </div>
                                 </div>
                             ) 
                             
                         
-                        }
+                    }
 
+                        function arrow(num){
+                            let arrow;
+                            if (num < 0) {arrow = red} else {arrow = green}
+
+                            return (
+                                <span>
+                                    <img id="gains" src ={arrow} alt="dirmarker" /><span>{num + "%"}</span>
+                                </span>  
+                                )                   
+                        }
 
                         ReactDOM.render(
                                 <div>
+                                    <div styles="inline">Total: ${Math.round(total*100)/100} {arrow(Math.round((total/totalInvestment-1)*10000)/100)}</div>
+                                    <hr></hr>
                                     {portfolioContainer}
                                 </div>, 
                             document.getElementById('root')
                         )
             });
             
-            
-
+            let testing = React.createRef();
+            function clickOption(){
+                console.log(testing.current);
+                
+            }
 
 
             function handleSubmit(){

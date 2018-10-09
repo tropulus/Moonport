@@ -71,3 +71,20 @@ select {
 .form:hover {
   background: rgb(240, 240, 240);
 }
+.options {
+  float:right;
+  border-radius: 100%;
+  width:30px;
+  height: 30px;
+  font-size: 15px;
+  border-style: solid;
+  border-color: rgba(201, 201, 201, 0.842);
+  background: rgb(250, 250, 250);
+}
+.options:hover {
+  background: rgb(240, 240, 240);
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+} 
