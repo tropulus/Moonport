@@ -37,8 +37,7 @@ class Portfolio extends React.Component {
                     let total = 0; //total portfolio value
                     let totalInvestment = 0;
 
-
-                    
+                                            
                         for (let i = 0; i < localStorage.length; i++){
             
                             let tag = localStorage.key(i) //key from local storage
@@ -84,10 +83,10 @@ class Portfolio extends React.Component {
                                 <div className="coin" key= {tag}>
                                     <div id="myTable">
                                         <button onClick={clickOption} className="options">⋮</button>
-                                            <div ref={testing} className="dropdown-content">
-                                                <p>Edit</p>
-                                                <p>Move up</p>
-                                                <p>Move down</p>
+                                            <div className="dropdown-content" name={tag}>
+                                                <button onClick={editHolding}>Edit</button>
+                                                <button>Move up</button>
+                                                <button>Move down</button>
                                             </div>
 
                                             <div className="row">
@@ -130,10 +129,11 @@ class Portfolio extends React.Component {
                         )
             });
             
-            let testing = React.createRef();
-            function clickOption(){
-                console.log(testing.current);
-                
+
+            function clickOption(e){
+                let state = e.target.nextSibling.style
+                if (state.display === "none") { state.display = "block"}
+                else {state.display = "none"}
             }
 
 
@@ -148,7 +148,20 @@ class Portfolio extends React.Component {
                 
             }
 
-            function handleClick(){
+            function editHolding(e){
+                let currentTag = e.target.parentElement.attributes.name.value
+
+                handleClick()
+                .then(() => {
+                    document.getElementsByName('tag')[0].value = currentTag})
+                        .then(() => {window.scrollTo(0, 10000)})
+                            .then(()=>{
+                                document.getElementsByName('editButton')[0].textContent = "Edit " + currentTag + " holding"
+                            })
+                
+            }
+
+            async function handleClick(){
 
                 let rullGardin = [];
                 let currencies = "BTC,ETH,XRP,BCH,EOS,XLM,LTC,USDT,ADA,XMR,TRX,MIOTA,DASH,BNB,NEO,ETC,XEM,XTZ,VET,DOGE,ZEC,OMG,BTG,MKR,BCN,ONT,LSK,ZRX,DCR,QTUM,BCD,BTS,NANO,ZIL,DGB,SC,ICX,STEEM,AE,XVG,WAVES,ETN,NPXS,BTM,BAT,ETP,HOT,STRAT,GNT,REP,SNT,PPT,KMD,TUSD,CNX,LINK,WTC,ARDR,RDD,WAN,MITH,KCS,IOST,XET,MAID,MOAC,AION,HC,AOA,ELF,HT,DGD,LRC,BNT,DCN,CMT,GXS,RHOC,FUN,MANA,DROP,QASH,ZEN,NAS,ARK,PAY,MONA,MCO,THETA,NXT,LOOM,NOAH,POWR,WAX,XIN,PIVX,ELA,BTCP,DAI,DGTX,,GAS,XZC,NEXO,DRGN,POLY,OCN,KNC,SYS,CTXC,NXS,IQ,KIN,NULS,SUB,ENG,GVT,BCO,SALT,QKC,EMC,NEC,CVC,TEL,BIX,WICC,ENJ,FCT,STORM,ICN,DENT,SKY,GRS,MAN,R,WGR,VERI,GTO,STORJ,LKY,CENNZ,ZIP,GBYTE,REQ,EDR,CND,BRD,DDD,RLC,SAN,EDO,HPB,VTC,RVN,ODE,IGNIS,TKY,TEN,BHPC,C20,MGO,FSN,PLR,NMC,GCR,RDN,NEBL,NCASH,ETHOS,TOMO,SMT,TRUE,CRPT,BFT,BLZ,STQ,SOC,APL,POE,XDN,SMART,DIG,RUFF,DTA,GNO,DATA,AGI,BLOCK,QSP,BITCNY,CS,RNT,TNB,CREDO,ANT,PPC,ACT,MEDX,GO,NAV,SRN";
@@ -182,7 +195,7 @@ class Portfolio extends React.Component {
                             <label htmlFor="price">Price USD</label>
                             <input id="price" placeholder="Price USD"></input>
 
-                            <button className="form">Add to portfolio</button>
+                            <button className="form" name="editButton">Add to portfolio</button>
 
                         </form>
                         </div>

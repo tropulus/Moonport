@@ -87,4 +87,6 @@ select {
 .dropdown-content {
   display: none;
   position: absolute;
+  background: lightgray;
+  margin-left: 490px;
 } 
