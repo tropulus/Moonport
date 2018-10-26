@@ -37,6 +37,8 @@ class Portfolio extends React.Component {
                     let total = 0; //total portfolio value
                     let totalInvestment = 0;
 
+                   
+
                                             
                         for (let i = 0; i < localStorage.length; i++){
             
@@ -84,9 +86,8 @@ class Portfolio extends React.Component {
                                     <div id="myTable">
                                         <button onClick={clickOption} className="options">⋮</button>
                                             <div className="dropdown-content" name={tag}>
-                                                <button onClick={editHolding}>Edit</button>
-                                                <button>Move up</button>
-                                                <button>Move down</button>
+                                                    <button className="drop" onClick={editHolding}>Edit</button>
+                                                    <button className="drop" onClick ={deleteHolding}>Delete</button>
                                             </div>
 
                                             <div className="row">
@@ -121,7 +122,7 @@ class Portfolio extends React.Component {
 
                         ReactDOM.render(
                                 <div>
-                                    <div styles="inline">Total: ${Math.round(total*100)/100} {arrow(Math.round((total/totalInvestment-1)*10000)/100)}</div>
+                                    <div styles="display:block">Total: ${Math.round(total*100)/100} {arrow(Math.round((total/totalInvestment-1)*10000)/100)}</div>
                                     <hr></hr>
                                     {portfolioContainer}
                                 </div>, 
@@ -132,10 +133,20 @@ class Portfolio extends React.Component {
 
             function clickOption(e){
                 let state = e.target.nextSibling.style
-                if (state.display === "none") { state.display = "block"}
-                else {state.display = "none"}
+                /* if (state.display === "none") { state.display = "block"}
+                else {state.display = "none"} */
+                state.display = "none"
+                state.display = "block"
             }
 
+            document.addEventListener("click", function(){
+
+            let nav = document.getElementsByClassName('dropdown-content')
+            let arr = [].slice.call(nav);
+            arr.map(e=>e.style.display = "none")
+
+            })
+          
 
             function handleSubmit(){
 
@@ -148,6 +159,7 @@ class Portfolio extends React.Component {
                 
             }
 
+
             function editHolding(e){
                 let currentTag = e.target.parentElement.attributes.name.value
 
@@ -159,6 +171,14 @@ class Portfolio extends React.Component {
                                 document.getElementsByName('editButton')[0].textContent = "Edit " + currentTag + " holding"
                             })
                 
+            }
+
+            function deleteHolding(e) {
+                let currentTag = e.target.parentElement.attributes.name.value
+
+                localStorage.removeItem(currentTag);
+
+                window.location.reload();
             }
 
             async function handleClick(){

@@ -18,7 +18,7 @@ app.post('/portData', (req,res) => {
     uri: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest',
     qs: {
       start: 1,
-      limit: 100,
+      limit: 201,
       convert: 'USD',
       sort: "market_cap"
     },
